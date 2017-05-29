@@ -1,0 +1,150 @@
+-- MySQL Workbench Forward Engineering
+
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `mydb` ;
+
+Table `mydb`.`Pedidos`
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Pedidos` (
+  
+`Codigo_Pedidos` INT NOT NULL COMMENT '',
+  
+`fecha_pedido` DATE NOT NULL COMMENT '',
+  
+`id_clientes` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Envio` VARCHAR(45) NOT NULL COMMENT '',
+  
+`productos_pedidos` INT NOT NULL COMMENT '',
+  
+`total_Pedidos` INT NOT NULL COMMENT '',
+  
+`Metodo_Pago` ENUM('tarejeta', 'pago', 'efectivo') NOT NULL COMMENT '',
+ 
+ PRIMARY KEY (`Codigo_Pedidos`, `id_clientes`, `productos_pedidos`, `Envio`)  COMMENT '')
+
+ ENGINE = InnoDB;
+
+
+Table `mydb`.`Usuarios`
+CREATE TABLE IF NOT EXISTS `mydb`.`Usuarios` (
+  
+`id_Usuarios` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Nombre` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Direccion` VARCHAR(45) NOT NULL COMMENT '',
+ 
+ `Email` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Tipo_usuario` ENUM('cliente', 'administrador') NOT NULL COMMENT '',
+ 
+ PRIMARY KEY (`id_Usuarios`)  COMMENT '',
+  
+CONSTRAINT `fk_usuarios`
+    
+FOREIGN KEY (`id_Usuarios`)
+    
+REFERENCES `mydb`.`Pedidos` (`id_clientes`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Repartidores`
+CREATE TABLE IF NOT EXISTS `mydb`.`Repartidores` (
+  
+`id_Repartidores` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Nombre` VARCHAR(45) NOT NULL COMMENT '',
+  
+`zona_Reparto` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Placa_furgoneta` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_Repartidores`)  COMMENT '',
+ 
+ CONSTRAINT `fk_repartidores`
+    
+FOREIGN KEY (`id_Repartidores`)
+    
+REFERENCES `mydb`.`Pedidos` (`id_clientes`)
+   
+ ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+ Table `mydb`.`Productos
+CREATE TABLE IF NOT EXISTS `mydb`.`Productos` (
+ 
+ `id_Productos` INT NOT NULL COMMENT '',
+  
+`Nombre_Producto` VARCHAR(45) NOT NULL COMMENT '',
+  
+`categoria` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Unidades_Disponibles` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Marca` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Origen` VARCHAR(45) NOT NULL COMMENT '',
+ 
+ `Dimensiones` ENUM('peso', 'volumen') NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_Productos`, `categoria`)  COMMENT '',
+  
+CONSTRAINT `fk_productos`
+    
+FOREIGN KEY (`id_Productos`)
+    
+REFERENCES `mydb`.`Pedidos` (`Codigo_Pedidos`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Categorias`
+CREATE TABLE IF NOT EXISTS `mydb`.`Categorias` (
+  
+`id_Categorias` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Observaciones` TEXT(200) NOT NULL COMMENT '',
+  
+`Condiciones_almacenamientos` ENUM('seco', 'congelado', 'frio') NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_Categorias`)  COMMENT '',
+  
+CONSTRAINT `fk_categorias`
+    
+FOREIGN KEY (`id_Categorias`)
+    
+REFERENCES `mydb`.`Productos` (`categoria`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

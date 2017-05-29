@@ -1,0 +1,375 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `mydb` ;
+
+Table `mydb`.`Datos_almacenamientos`
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Datos_almacenamientos` (
+  
+`id_almacenamientos` INT NOT NULL COMMENT '',
+  
+`Condiciones` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Observaciones` TEXT(200) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_almacenamientos`)  COMMENT '',
+  
+CONSTRAINT `fk_datos_almacenamientos`
+    
+FOREIGN KEY (`id_almacenamientos`)
+    
+REFERENCES `mydb`.`Productos` (`id_Productos`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+ Table `mydb`.`Datos_categorias`
+CREATE TABLE IF NOT EXISTS `mydb`.`Datos_categorias` (
+  
+`id_datosCategorias` INT NOT NULL COMMENT '',
+  
+`Observaciones` TEXT(200) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_datosCategorias`)  COMMENT '',
+  
+CONSTRAINT `fk_Datos_categorias`
+    
+FOREIGN KEY (`id_datosCategorias`)
+    
+REFERENCES `mydb`.`Datos_almacenamientos` (`id_almacenamientos`)
+   
+ ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Categorias`
+CREATE TABLE IF NOT EXISTS `mydb`.`Categorias` (
+  
+`id_Categorias` INT NOT NULL COMMENT '',
+  
+`id_productos` INT NOT NULL COMMENT '',
+  
+ PRIMARY KEY (`id_productos`, `id_Categorias`)  COMMENT '',
+  
+INDEX `fk_categorias_idx` (`id_Categorias` ASC)  COMMENT '',
+  
+CONSTRAINT `fk_categorias`
+    FOREIGN KEY (`id_Categorias`)
+    
+REFERENCES `mydb`.`Datos_categorias` (`id_datosCategorias`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Productos`
+CREATE TABLE IF NOT EXISTS `mydb`.`Productos` (
+  
+`id_Productos` INT NOT NULL COMMENT '',
+  
+`num_productos` INT NOT NULL COMMENT '',
+  
+`nom_Productos` VARCHAR(45) NOT NULL COMMENT '',
+ 
+ `Precio` INT NOT NULL COMMENT '',
+  PRIMARY KEY (`id_Productos`)  COMMENT '',
+  
+ CONSTRAINT `fk_productos`
+    
+FOREIGN KEY (`id_Productos`)
+    
+REFERENCES `mydb`.`Categorias` (`id_Categorias`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Datos_Pedidos`
+CREATE TABLE IF NOT EXISTS `mydb`.`Datos_Pedidos` (
+  
+`id_clientes` INT NOT NULL COMMENT '',
+  
+`Nom_productos` VARCHAR(45) NOT NULL COMMENT '',
+  
+`ciudad` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_clientes`)  COMMENT '')
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Productos_Pedidos`
+
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Productos_Pedidos` (
+  
+`id_pedidos` INT NOT NULL COMMENT '',
+  
+`Num_productos` INT NOT NULL COMMENT '',
+  
+`Nom_productos` INT NOT NULL COMMENT '',
+  
+`Cantidad` DATETIME NOT NULL COMMENT '',
+  
+`Precio` INT NOT NULL COMMENT '',
+  
+`Total_pagar` INT NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_pedidos`, `Num_productos`)  COMMENT '',
+  
+CONSTRAINT `fk_Productos_Pedidos`
+    
+FOREIGN KEY (`id_pedidos`)
+    
+REFERENCES `mydb`.`Datos_Pedidos` (`id_pedido`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Metodo_Pago 
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Metodo_Pago` (
+  
+`idMetodo_Pago` INT NOT NULL COMMENT '',
+  
+`metodo_pago` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`idMetodo_Pago`)  COMMENT '',
+  
+CONSTRAINT `fk_metodo_pago`
+    
+FOREIGN KEY (`idMetodo_Pago`)
+    
+REFERENCES `mydb`.`Pedidos` (`id_pedido`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Repartidor
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Repartidor` (
+  
+`id_Repartidor` INT NOT NULL COMMENT '',
+  
+`fecha` DATE NOT NULL COMMENT '',
+  
+`placa_furgoneta` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_Repartidor`)  COMMENT '',
+  
+CONSTRAINT `fk_repartidor`
+   
+ FOREIGN KEY (`id_Repartidor`)
+    
+REFERENCES `mydb`.`Pedidos` (`id_pedido`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+
+
+Table `mydb`.`usuarios
+
+CREATE TABLE IF NOT EXISTS `mydb`.`usuarios` (
+  
+`id_usuarios` INT NOT NULL COMMENT '',
+  
+`C_usuario` INT NOT NULL COMMENT '',
+ 
+ PRIMARY KEY (`id_usuarios`, `C_usuario`)  COMMENT '',
+  
+CONSTRAINT `fk_usuarios`
+    FOREIGN KEY (`id_usuarios`)
+    
+REFERENCES `mydb`.`Pedidos` (`id_pedido`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+Table `mydb`.`tipo_usuarios`
+CREATE TABLE IF NOT EXISTS `mydb`.`tipo_usuarios` (
+  
+`codigo_usuario` INT NOT NULL COMMENT '',
+  
+`tipo_usuarios` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`codigo_usuario`)  COMMENT '',
+  
+CONSTRAINT `fk_tipo_usuarios`
+    
+FOREIGN KEY (`codigo_usuario`)
+    
+REFERENCES `mydb`.`usuarios` (`id_usuarios`)
+    
+ON DELETE NO ACTION
+    O
+oN UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Datos_usuarios 
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Datos_usuarios` (
+ 
+`id_usuarios` INT NOT NULL COMMENT '',
+  
+`nombre` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Direccion` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Email` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_usuarios`)  COMMENT '',
+  
+CONSTRAINT `fk_datos_usuarios`
+    
+FOREIGN KEY (`id_usuarios`)
+    
+REFERENCES `mydb`.`usuarios` (`id_usuarios`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Datos_repartidor
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Datos_repartidor` (
+  
+`cc_repartidor` INT NOT NULL COMMENT '',
+  
+`Nombre` VARCHAR(45) NOT NULL COMMENT '',
+ 
+`placa_furgoneta` INT NOT NULL COMMENT '',
+  
+`zona_reparto` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`cc_repartidor`)  COMMENT '',
+  
+CONSTRAINT `fk_datos_repartidor`
+    
+FOREIGN KEY (`cc_repartidor`)
+   
+ REFERENCES `mydb`.`Repartidor` (`id_Repartidor`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+Table `mydb`.`Repartidores
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Repartidores` (
+  
+`id_Repartidores` INT NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_Repartidores`)  COMMENT '',
+  
+CONSTRAINT `fk_repartidores`
+    FOREIGN KEY (`id_Repartidores`)
+    
+REFERENCES `mydb`.`Datos_repartidor` (`cc_repartidor`)
+    o
+N DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+Table `mydb`.`Pedidos
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Pedidos` (
+  
+`id_pedido` INT NOT NULL COMMENT '',
+  `
+fecha` DATE NOT NULL COMMENT '',
+  
+`Id_cliente` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_pedido`, `Id_cliente`)  COMMENT '',
+  
+CONSTRAINT `fk_pedidos`
+   
+ FOREIGN KEY (`id_pedido`)
+    
+REFERENCES `mydb`.`Productos` (`id_Productos`)
+    
+ON DELETE NO ACTION
+  
+ON UPDATE NO ACTION,
+  
+CONSTRAINT `fk_pedidos`
+    
+FOREIGN KEY (`id_pedido`)
+    
+REFERENCES `mydb`.`Repartidores` (`id_Repartidores`)
+    
+ON DELETE NO ACTION
+   
+ ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+Table `mydb`.`Datos_Pedidos
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Datos_Pedidos` (
+  
+`id_clientes` INT NOT NULL COMMENT '',
+  
+`Nom_productos` VARCHAR(45) NOT NULL COMMENT '',
+  
+`ciudad` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_clientes`)  COMMENT '')
+ENGINE = InnoDB;
+
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -1,0 +1,142 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `mydb` ;
+
+
+Table `mydb`.`Regalos`
+CREATE TABLE IF NOT EXISTS `mydb`.`Regalos` (
+  
+`id_Regalos` INT NOT NULL COMMENT '',
+  
+`Descripcion` TEXT(200) NOT NULL COMMENT '',
+ 
+ PRIMARY KEY (`id_Regalos`)  COMMENT '')
+
+ENGINE = InnoDB;
+
+
+Table `mydb`.`Eventos`
+CREATE TABLE IF NOT EXISTS `mydb`.`Eventos` (
+  
+`num_Eventos` INT NOT NULL COMMENT '',
+  
+`Fecha_Hora` DATETIME(200) NOT NULL COMMENT '',
+  
+`nino_asistente` INT NOT NULL COMMENT '',
+  
+`Ubicacion` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`num_Eventos`, `nino_asistente`)  COMMENT '')
+
+ENGINE = InnoDB;
+
+Table `mydb`.`Ninos`
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Ninos` (
+  
+`Registro_civil` INT NOT NULL COMMENT '',
+  
+`Nombre` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Apellido` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Direccion` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`Registro_civil`)  COMMENT '',
+  
+CONSTRAINT `fk_ninos`
+    FOREIGN KEY (`Registro_civil`)
+    
+REFERENCES `mydb`.`Regalos` (`id_Regalos`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION,
+  
+CONSTRAINT `fk_ninos`
+    
+FOREIGN KEY (`Registro_civil`)
+    
+REFERENCES `mydb`.`Eventos` (`nino_asistente`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+Table `mydb`.`Grupo_vecinos`
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Grupo_vecinos` (
+  
+`id_vecinos` INT NOT NULL COMMENT '',
+  
+`Barrio` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Cantidad_eventos` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Eventos_organizados` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Actuar` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_vecinos`, `Actuar`)  COMMENT '')
+
+ENGINE = InnoDB;
+
+
+
+
+able `mydb`.`Vecinos`
+CREATE TABLE IF NOT EXISTS `mydb`.`Vecinos` (
+  
+`id_vecinos` INT NOT NULL COMMENT '',
+  
+`Nombre` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Apellido` VARCHAR(45) NOT NULL COMMENT '',
+  
+`Vecinos_causa` INT NOT NULL COMMENT '',
+  
+`Rey_mago` VARCHAR(45) NOT NULL COMMENT '',
+  
+PRIMARY KEY (`id_vecinos`, `Rey_mago`)  COMMENT '',
+  
+INDEX `fk_vecinos_idx` (`Rey_mago` ASC)  COMMENT '',
+ 
+ CONSTRAINT `fk_vecinos`
+    
+FOREIGN KEY ()
+   
+ REFERENCES `mydb`.`Ninos` ()
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION,
+  
+CONSTRAINT `fk_vecinos`
+   
+ FOREIGN KEY (`Rey_mago`)
+    
+REFERENCES `mydb`.`Grupo_vecinos` (`Actuar`)
+    
+ON DELETE NO ACTION
+    
+ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
